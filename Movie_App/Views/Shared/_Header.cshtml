@@ -1,0 +1,45 @@
+﻿
+
+<nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky">
+    <div class="container">
+        <a class="navbar-brand text-white fw-bold" href="@Url.Action("Movie", "Home")"><i class="fa fa-video-camera col_red me-1"></i> Movie Mania</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mb-0">
+                <li class="nav-item ">
+                    
+                    <a class="nav-link active text-decoration-underline " aria-current="page" href="@Url.Action("Movie", "Home")">Movies</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("TVSeries", "Home")">Series</a>
+                </li>
+                <li class="nav-item">
+                    <p>
+                        <a class="nav-link" data-bs-toggle="collapse" href="#genres" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            Genres
+                        </a>
+                    </p>
+                    <div class="collapse" id="genres">
+                        <div class="d-flex card-body text-white" style="flex-wrap:wrap">
+                            @foreach (var item in ViewBag.genre)
+                            {
+                                <a class="nav-link fw-light" style="flex-basis:150px;"  href="@Url.Action("Movie_Genre", "Home", new {genreName=item})"> @item</a>
+                            }
+                        </div>
+                    </div>
+                </li>
+                @if (ViewBag.UserRole == "Admin")
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("AddMovie", "Movie")"> Make Changes</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
