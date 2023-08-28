@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 using PagedList;
+using System.Web.UI;
 
 namespace Movie_App.Controllers
 {
@@ -22,7 +23,7 @@ namespace Movie_App.Controllers
         }
 
 
-        public ActionResult Movie(string searchname)
+        public ActionResult Movie(int?page,string searchname=" ")
         {
             ViewBag.genre = movieService.GetGenres();
 
@@ -36,7 +37,7 @@ namespace Movie_App.Controllers
                 search = search.Where(x => x.Name.ToLower().Contains(searchname.ToLower()));
             }
 
-           
+         
             var loggedInUserName = HttpContext.Session["LoggedInUserName"] as string;
             ViewBag.LoggedInUserName = loggedInUserName;
             var userrole = HttpContext.Session["UserRole"] as string;
@@ -44,22 +45,39 @@ namespace Movie_App.Controllers
 
             var highrate = movieService.GetMovieWithHighestRating();
             ViewBag.Highrate = highrate;
+            int pagesize = 4;
+            int total = search.Count();
+            int totalpages=(int)Math.Ceiling((double)total/pagesize);
+            int currentPage = page ?? 1;
+            currentPage = Math.Max(1, Math.Min(currentPage, totalpages));
 
+            search = search.Skip((currentPage - 1) * pagesize).Take(pagesize);
+            ViewBag.TotalPages = totalpages;
+            ViewBag.CurrentPage = currentPage;
             return View(search);
 
 
 
         }
 
-        public ActionResult Movie_Genre(string genreName)
+        public ActionResult Movie_Genre(string genreName,int? page)
         {
             ViewBag.genre = movieService.GetGenres();
 
             var movies =movieService.GetMovieByGenre(genreName);
+            int pagesize = 4;
+            int total = movies.Count();
+            int totalpages = (int)Math.Ceiling((double)total / pagesize);
+            int currentPage = page ?? 1;
+            currentPage = Math.Max(1, Math.Min(currentPage, totalpages));
+
+            movies = movies.Skip((currentPage - 1) * pagesize).Take(pagesize);
+            ViewBag.TotalPages = totalpages;
+            ViewBag.CurrentPage = currentPage;
             ViewBag.name = genreName;
             return View(movies);
         }
-        public ActionResult TVSeries(string searchname)
+        public ActionResult TVSeries(int?page,string searchname="")
         {
             ViewBag.genre = seriesService.GetGenres();
 
@@ -76,16 +94,33 @@ namespace Movie_App.Controllers
             ViewBag.UserRole = userrole;
             var highrate = seriesService.GetSeriesWithHighRating();
             ViewBag.Highrate = highrate;
+            int pagesize = 4;
+            int total = search.Count();
+            int totalpages = (int)Math.Ceiling((double)total / pagesize);
+            int currentPage = page ?? 1;
+            currentPage = Math.Max(1, Math.Min(currentPage, totalpages));
 
+            search = search.Skip((currentPage - 1) * pagesize).Take(pagesize);
+            ViewBag.TotalPages = totalpages;
+            ViewBag.CurrentPage = currentPage;
             return View(search);
         }
 
-        public ActionResult Series_Genre(string genreName)
+        public ActionResult Series_Genre(string genreName,int?page)
         {
             ViewBag.genre = seriesService.GetGenres();
 
             var movies = seriesService.GetSeriesByGenre(genreName);
             ViewBag.name = genreName;
+            int pagesize = 4;
+            int total = movies.Count();
+            int totalpages = (int)Math.Ceiling((double)total / pagesize);
+            int currentPage = page ?? 1;
+            currentPage = Math.Max(1, Math.Min(currentPage, totalpages));
+
+            movies = movies.Skip((currentPage - 1) * pagesize).Take(pagesize);
+            ViewBag.TotalPages = totalpages;
+            ViewBag.CurrentPage = currentPage;
             return View(movies);
         }
 
