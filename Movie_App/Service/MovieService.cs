@@ -58,10 +58,10 @@ namespace Movie_App.Service
         }
         public IEnumerable<string> GetGenres()
         {
-           var genre=movieContext.pickedGenres
-                .OrderBy(c=>c.name)
-                .Select (c => c.name)
-                .Distinct();
+            var genre = movieContext.pickedGenres
+                 .OrderBy(c => c.name)
+                 .Select(c => c.name)
+                 .Distinct();
             return genre;
         }
 
@@ -94,7 +94,43 @@ namespace Movie_App.Service
 
             return movieList;
         }
+        public IEnumerable<string> GetCountry()
+        {
+            var country = movieContext.Movies
+                .OrderBy(c => c.Country)
+                .Select(c => c.Country)
+                .Distinct();
+            return country;
+        }
+        public IEnumerable<MovieResources> GetMovieByCountry(string countryName)
+        {
+            var movies = from movie in movieContext.Movies
+                         where movie.Country == countryName
+                         select movie;
 
+            var movieList = new List<MovieResources>();
+
+            foreach (var movie in movies)
+            {
+                var movieResource = new MovieResources
+                {
+                    Code = movie.Code,
+                    Name = movie.Name,
+                    TicketPrice = movie.TicketPrice,
+                    Description = movie.Description,
+                    Country = movie.Country,
+                    ReleaseDate = movie.ReleaseDate,
+                    ImagePath = movie.ImagePath,
+                    Id = movie.Id,
+                    Slug = movie.Slug,
+                    VideoPath = movie.VideoPath,
+                };
+
+                movieList.Add(movieResource);
+            }
+
+            return movieList;
+        }
 
 
 
@@ -163,8 +199,6 @@ namespace Movie_App.Service
                 existingMovie.ImagePath = movie.ImagePath;
                 existingMovie.VideoPath = movie.VideoPath;
 
-                existingMovie.Slug = movie.Slug;
-
 
                 movieContext.SaveChanges();
 
@@ -175,6 +209,9 @@ namespace Movie_App.Service
             var movie = movieContext.Movies.Include(c => c.SelectedGenres).FirstOrDefault(p => p.Id == id);
             movieContext.pickedGenres.RemoveRange(movie.SelectedGenres);
             movieContext.MoviesComment.RemoveRange(movie.MovieComments);
+            movieContext.rating.RemoveRange(movie.Ratings);
+
+
             movieContext.Movies.Remove(movie);
             movieContext.SaveChanges();
 
@@ -203,7 +240,7 @@ namespace Movie_App.Service
 
                 movielist.Add(movieresc);
             }
-            return movielist;
+            return movielist.OrderBy(c => c.Name);
         }
 
         public MovieResources GetMovieByCode(string Slug)

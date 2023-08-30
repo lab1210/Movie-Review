@@ -24,9 +24,9 @@ namespace Movie_App
             bundles.Add(new ScriptBundle("~/bundles/FontAwesome").Include(
                      "~/Scripts/js2/Fontawesome.js"));
 
-            /*
-                        bundles.Add(new ScriptBundle("~/bundles/bootstrap5").Include(
-                                 "~/Scripts/js/bootstrap.min.js"));*/
+
+          /*  bundles.Add(new ScriptBundle("~/bundles/bootstrap5").Include(
+                     "~/Scripts/js/bootstrap.min.js"));*/
 
             bundles.Add(new ScriptBundle("~/bundles/bstrap").Include(
                       "~/Scripts/bootstrap.bundle.min.js"));

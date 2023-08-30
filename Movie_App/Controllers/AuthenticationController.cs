@@ -35,11 +35,7 @@ namespace Movie_App.Controllers
                 try
                 {
                     loginService.CheckUser(login);
-                    if ((login.Role == "Admin"))
-                    {
-                        return RedirectToAction("MovieList", "Movie");
-
-                    }
+                
                     return RedirectToAction("TvSeries", "Home");
                 }
                 catch(Exception ex)

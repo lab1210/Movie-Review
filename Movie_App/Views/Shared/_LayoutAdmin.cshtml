@@ -20,14 +20,8 @@
         @Html.Partial("_Top")
     </section>
 
-    <section id="header">
-        @Html.Partial("_HeaderAdmin")
-
-    </section>
-    @RenderBody()
-
-
    
+    @RenderBody()
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/jqueryDataTables")
@@ -35,7 +29,7 @@
     @Scripts.Render("~/bundles/Feather")
     @Scripts.Render("~/bundles/script")
     @Scripts.Render("~/bundles/FontAwesome")
-    @Scripts.Render("~/bundles/index")
+
     @RenderSection("Scripts", required: false)
 
 

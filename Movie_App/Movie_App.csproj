@@ -494,7 +494,6 @@
     <Content Include="Views\Movie\EditSeries.cshtml" />
     <Content Include="Views\Movie\Create_Admin.cshtml" />
     <Content Include="Views\Movie\Admin_List.cshtml" />
-    <Content Include="Views\Shared\_HeaderAdmin.cshtml" />
     <Content Include="Views\Shared\_LayoutAuth.cshtml" />
     <Content Include="Views\Shared\_Top.cshtml" />
     <Content Include="Views\Shared\_TopSeries.cshtml" />
@@ -502,11 +501,12 @@
     <Content Include="Views\Shared\_HeaderSeries.cshtml" />
     <Content Include="Views\Home\Movie_Genre.cshtml" />
     <Content Include="Views\Home\Series_Genre.cshtml" />
+    <Content Include="Views\Home\Movie_Country.cshtml" />
+    <Content Include="Views\Home\Series_Country.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="MoviePics\" />
-    <Folder Include="Trailers\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

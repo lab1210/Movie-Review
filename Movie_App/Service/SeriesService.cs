@@ -42,6 +42,44 @@ namespace Movie_App.Service
         }
 
 
+        public IEnumerable<string> GetCountry()
+        {
+            var country = seriescontext.series
+                .OrderBy(c => c.Country)
+                .Select(c => c.Country)
+                .Distinct();
+            return country;
+        }
+        public IEnumerable<SeriesResources> GetSeriesByCountry(string countryName)
+        {
+            var movies = from movie in seriescontext.series
+                         where movie.Country == countryName
+                         select movie;
+
+            var movieList = new List<SeriesResources>();
+
+            foreach (var movie in movies)
+            {
+                var movieResource = new SeriesResources
+                {
+                    Code = movie.Code,
+                    Name = movie.Name,
+                    TicketPrice = movie.TicketPrice,
+                    Description = movie.Description,
+                    Country = movie.Country,
+                    ReleaseDate = movie.ReleaseDate,
+                    ImagePath = movie.ImagePath,
+                    Id = movie.Id,
+                    Slug = movie.Slug,
+                    VideoPath = movie.VideoPath,
+                    NumberOfSeasons=movie.NumberOfSeasons,
+                };
+
+                movieList.Add(movieResource);
+            }
+
+            return movieList;
+        }
         public IEnumerable<string> GetGenres()
         {
             var genre = seriescontext.seriespickedGenres
@@ -225,8 +263,6 @@ namespace Movie_App.Service
                 existingMovie.ReleaseDate = series.ReleaseDate;
                 existingMovie.ImagePath = series.ImagePath;
                 existingMovie.VideoPath = series.VideoPath;
-
-                existingMovie.Slug = series.Slug;
                 existingMovie.NumberOfSeasons = series.NumberOfSeasons;
 
 
@@ -239,6 +275,10 @@ namespace Movie_App.Service
         {
             var movie = seriescontext.series.Include(c => c.SeriesSelectedGenres).FirstOrDefault(p => p.Id == id);
             seriescontext.seriespickedGenres.RemoveRange(movie.SeriesSelectedGenres);
+            seriescontext.SeriesComments.RemoveRange(movie.SeriesComments);
+            seriescontext.seriesrating.RemoveRange(movie.seriesRatings);
+
+
             seriescontext.series.Remove(movie);
             seriescontext.SaveChanges();
 
@@ -268,7 +308,7 @@ namespace Movie_App.Service
                 };
                 movielist.Add(movieresc);
             }
-            return movielist;
+            return movielist.OrderBy(c=>c.Name);
         }
 
 

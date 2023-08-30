@@ -2,9 +2,8 @@
 
 @{
     ViewBag.Title = "AddMovie";
-    Layout = "../Shared/_LayoutAdmin.cshtml";
+       Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
-
 
 
 @using (Html.BeginForm("AddMovie", "Movie", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -51,32 +50,62 @@
                     @Html.EditorFor(model => model.Country, new { htmlAttributes = new { style = "color: black;" } })
                     @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
                 </div>
-            </div>
+            </div><br />
             <div class="row">
 
                 <div class="col-lg-3 col-sm-6 col-12">
 
                     <div class="form-group">
-                        <label>Genres</label>
+                        <div style="display:flex">
+                            <label> Video url</label>
+                        </div>
+                        <div>
+
+                            @Html.TextBoxFor(model => model.VideoPath, new { placeholder = "Paste Url..." })
+
+                        </div>
+
+
                     </div>
-                    <div style="display:flex;gap:10px">
+                </div>
+                <div class="col-lg-3 col-sm-6 col-12">
 
-                        @for (int i = 0; i < Model.SelectedGenres.Count(); i++)
-                        {
-                            <div>
-                                <label style="display:flex">
-                                    @Html.HiddenFor(model => model.SelectedGenres[i].genreid)
-                                    @Html.HiddenFor(model => model.SelectedGenres[i].name)
-                                    @Html.EditorFor(model => model.SelectedGenres[i].Selected)
-                                    @Html.DisplayFor(model => model.SelectedGenres[i].name)
-                                </label>
+                    <div class="form-group">
+                        <div style="display:flex">
+                            <label> Image</label>
+                        </div>
+                        <div class="image-upload">
 
-                            </div>
-                        }
+                            @Html.TextBoxFor(model => model.Image, new { type = "file" })
+
+                        </div>
                     </div>
                 </div>
 
+                <div style="margin-top: 1rem;">
+                    <div class="form-group">
+                        <label>Genres</label>
+                    </div>
+                    <div class="card" style="border: 1px solid #ccc; border-radius: 0.25rem;">
+                        <div class="card-body d-flex flex-wrap gap-sm-5">
+                            @for (int i = 0; i < Model.SelectedGenres.Count(); i++)
+                            {
+                                <div class="form-check" style="margin-bottom: 0.5rem;">
+                                    @Html.EditorFor(model => model.SelectedGenres[i].Selected, new { htmlAttributes = new { @class = "form-check-input", style = "margin-right: 0.25rem;", id = $"SelectedGenres_{i}_Selected" } })
+                                    <label class="form-check-label" for="@($"SelectedGenres_{i}_Selected")" style="margin-left: 0.5rem; font-weight: normal;">
+                                        @Html.HiddenFor(model => model.SelectedGenres[i].genreid)
+                                        @Html.HiddenFor(model => model.SelectedGenres[i].name)
+                                        @Html.DisplayFor(model => model.SelectedGenres[i].name, new { style = "margin-left: 0.5rem;" })
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.SelectedGenres, "", new { @class = "text-danger", style = "margin-top: 0.5rem;" })
+                </div>
+
             </div>
+
             <div class="row">
                 <div class="col-lg-12">
                     <div class="form-group">
@@ -85,35 +114,19 @@
                     @Html.TextAreaFor(model => model.Description, new { rows = 5, cols = 50 })
                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                 </div>
-                <div class="row">
-
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <div style="display:flex">
-                                <label> Image</label>
-                            </div>
-                            <div class="image-upload">
-                                @Html.TextBoxFor(model => model.Image, new { type = "file" })
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <div style="display:flex">
-                                <label> Trailer</label>
-                            </div>
-                            <div class="image-upload">
-                                @Html.TextBoxFor(model => model.Video, new { type = "file" })
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
+
+
+            <div class="row">
+
+
+            </div>
+            <div class="row">
+
+
+
+            </div>
+
 
             <div class="row">
                 <div class="col-lg-12">

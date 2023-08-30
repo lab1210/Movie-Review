@@ -26,6 +26,9 @@ namespace Movie_App.IService
         IEnumerable<string> GetGenres();
         IEnumerable<SeriesResources> GetSeriesByGenre(string genreName);
 
+        IEnumerable<SeriesResources> GetSeriesByCountry(string countryName);
+        IEnumerable<string> GetCountry();
+
 
     }
 }

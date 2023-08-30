@@ -8,153 +8,147 @@
 
 
 
-
-<section id="center" class="center_home" style="background-color:#191A1D;color:#fff">
-    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2" class="" aria-current="true"></button>
-        </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <div class="d-flex align-items-center justify-content-center">
-                    <img src="@Model.ImagePath" class="d-block w-100" alt="..." style="height:800px">
-                    <div class="carousel-caption d-md-block text-start" style="padding-top:100px">
-                        <h1 class="font_60">@Model.Name</h1>
-                        <h6 class="mt-3">
-
-                            <span class="col_red me-3">
-                                @for (var i = 0; i < ViewBag.Rate; i++)
-                                {
-                                    <i class="fa fa-star"></i>
-                                }
-                            </span>
+<section id="trend" class="pt-4 pb-5" style="background-color:#010102">
 
 
-                            @(ViewBag.Rate == 0 ? "Year: " + Model.ReleaseDate.Year : ViewBag.Rate + " (Imdb) Year: " + Model.ReleaseDate.Year)
 
+    <div class="row">
+        <div class="container">
+            <div class="card" style="margin-left:100px;margin-right:100px">
+                <div class="card-body">
 
-                            @foreach (var genre in Model.SelectedGenres)
+                    <h2 style="font-weight: 400; font-family: 'Raleway', sans-serif;">@Model.Name</h2>
+
+                    <h6 style="font-weight:100; font-family: 'Raleway', sans-serif;">@Model.ReleaseDate.Year</h6>
+                    <span class="col_red me-3">
+                        @if (ViewBag.Rate != 0)
+                        {
+                            for (var i = 0; i < ViewBag.Rate; i++)
                             {
-                                <a class="bg_red p-2 pe-4 ps-4 ms-3 text-white d-inline-block" style="text-decoration:none" href="@Url.Action("Movie_Genre", "Home", new {genreName=genre.name})">@genre.name</a>
+                                <i class="fa fa-star"></i>
                             }
-                        </h6>
+                        }
+                        else
+                        {
+                            <strong style="font-weight:lighter">Not Rated</strong>
 
-                        <p class="mt-3">@Model.Description </p>
-                        <p class="mb-2"><span class="col_red me-1 fw-bold">Country:</span> @Model.Country</p>
+                        }
+                    </span>
+                </div>
+
+                <div class="card-body" style="display:flex">
+                    <img src="@Model.ImagePath" class="d-block" alt="..." style="width:300px">
+
+                    @if (Model.VideoPath == null)
+                    {
+                        <div class="text-center" style="padding-top:400px;padding-left:500px;display:flex;gap:10px">
+                            <span style="color:#DE1002"><i class="fa fa-exclamation-circle" style="font-size:40px"></i></span>
+                            <h3>Video not available</h3>
+                        </div>
+                    }
+                    else
+                    {
+                        <iframe style="height:500px;width:800px" class="d-block" src="@Model.VideoPath" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 
-                    </div>
+                    }
 
                 </div>
-            </div>
-            <div class="carousel-item">
-                @if (Model.VideoPath == null)
-                {
-                    <div class="d-flex align-items-center justify-content-center" style="background-color:#070507">
-                        <div class="d-block w-100" style="background-color: #070507; height: 800px">
-                            <div class="text-center" style="padding-top:400px;padding-left:500px;display:flex;gap:10px">
-                                <span style="color:#DE1002"><i class="fa fa-exclamation-circle" style="font-size:40px"></i></span>
-                                <h3>Video not available</h3>
+                <div class="card-body">
+
+                    <div style="display:flex">
+                        @foreach (var genre in Model.SelectedGenres)
+                        {
+                            <a class="bg_red p-2 pe-4 ps-4 ms-3 text-white d-inline-block " style="text-decoration:none;border-radius:10px" href="@Url.Action("Movie_Genre", "Home", new {genreName=genre.name})">@genre.name</a>
+                        }
+                    </div>
+                    <p><h5 style="font-weight:lighter"> @Model.Description</h5></p>
+                    <hr />
+                    <p><h5 style="font-weight:lighter"><span style="font-weight:bold">Country</span> <span class="col_red me-1"> @Model.Country</span></h5></p>
+                    <hr />
+
+
+                </div>
+                <div class="card-body">
+
+                    @if (ViewBag.LoggedInUserName != null && ViewBag.UserRole != "Admin")
+                    {
+                        using (Html.BeginForm("AddRating", "Home", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="form-group" style="color: #fff;">
+                                <h2>Rate the Movie</h2>
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <label>
+                                        @Html.RadioButtonFor(model => model.NewRating.Value, i)
+                                        <i class="fa fa-star" style="color: #DE1002;"></i>
+                                    </label>
+                                }
                             </div>
+                            @Html.HiddenFor(c => Model.Slug)
+                            @Html.HiddenFor(model => model.Id)
+                            <input type="submit" value="Submit" class="btn btn-primary" style="background-color: #DE1002; border-color: #ff4500;" />
+                            <hr />
+                        }
+                    }
+
+
+                    @if (ViewBag.LoggedInUserName != null && ViewBag.UserRole != "Admin")
+                    {
+                        <div class="add-comment-container">
+                            <h2 class="text-white">Add a Comment</h2>
+                            @using (Html.BeginForm("AddComment", "Home", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="form-group">
+                                    @Html.TextAreaFor(model => model.NewCommentresource.Post, new { @class = "form-control", rows = "2", style = "background-color: #191A1D; border-color: #DE1002; color: #fff;" })
+                                    @Html.ValidationMessageFor(model => model.NewCommentresource.Post, "", new { @class = "text-danger" })
+
+                                </div>
+                                @Html.HiddenFor(c => Model.Slug)
+                                @Html.HiddenFor(model => model.Id)
+                                <input type="submit" value="Post" class="btn btn-primary" style="background-color: #DE1002; border-color: #ff4500;" />
+                            }
                         </div>
-                    </div>
-                }
-                else
-                {
-                    <div class="d-flex align-items-center justify-content-center" style="background-color:#070507">
+                    }
 
-                        <video src="@Model.VideoPath" class="d-block w-100" alt="..." style="height:800px;" controls></video>
-
-                    </div>
-                }
-            </div>
-        </div>
-
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <a class="carousel-control-next text-decoration-none" href="" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span style="color:#FFFFFF">See Trailer</span>
-        </a>
-    </div>
-    <br />
-
-
-
-
-
-    @if (ViewBag.LoggedInUserName != null && ViewBag.UserRole != "Admin")
-    {
-        using (Html.BeginForm("AddRating", "Home", FormMethod.Post))
-        {
-            @Html.AntiForgeryToken()
-            <div class="form-group" style="color: #fff;">
-                <h2>Rate the Movie</h2>
-                @for (int i = 1; i <= 5; i++)
-                {
-                    <label>
-                        @Html.RadioButtonFor(model => model.NewRating.Value, i)
-                        <i class="fa fa-star" style="color: #DE1002;"></i>
-                    </label>
-                }
-            </div>
-            @Html.HiddenFor(c => Model.Slug)
-            @Html.HiddenFor(model => model.Id)
-            <input type="submit" value="Submit" class="btn btn-primary" style="background-color: #DE1002; border-color: #ff4500;" />
-        }
-    }
-
-    <hr style="border-color: #ff4500;" />
-
-    @if (ViewBag.LoggedInUserName != null && ViewBag.UserRole != "Admin")
-    {
-        <div class="add-comment-container">
-            <h2 class="text-white">Add a Comment</h2>
-            @using (Html.BeginForm("AddComment", "Home", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                <div class="form-group">
-                    @Html.TextAreaFor(model => model.NewCommentresource.Post, new { @class = "form-control", rows = "2", style = "background-color: #191A1D; border-color: #DE1002; color: #fff;" })
-                    @Html.ValidationMessageFor(model => model.NewCommentresource.Post, "", new { @class = "text-danger" })
-
+                    @if (Model.MovieCommentsresource != null && Model.MovieCommentsresource.Count > 0)
+                    {
+                        <div class="comments-container" style="margin-top:20px">
+                            <h2 class="text-white">Reviews</h2>
+                            <ul style="list-style-type: none; padding: 0;">
+                                @foreach (var comment in Model.MovieCommentsresource)
+                                {
+                                    <li style="margin-bottom: 20px; border: 1px solid #DE1002; padding: 10px;">
+                                        <div class="comment-info">
+                                            <span class="comment-user" style="color: #DE1002;">@comment.User</span>
+                                            <span class="comment-date" style="color: #999; margin-left: 10px;">@comment.PostDate.ToShortDateString()</span>
+                                        </div>
+                                        <div class="comment-content" style="margin-top: 10px;">
+                                            @comment.Post
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    else if (Model.MovieCommentsresource.Count == 0)
+                    {
+                        <div class="comments-container" style="margin-top: 20px;">
+                            <h2 style="color: #DE1002;">Reviews</h2>
+                            <h6 style="font-size: 14px; color: #fff;">No Reviews</h6>
+                        </div>
+                    }
                 </div>
-                @Html.HiddenFor(c => Model.Slug)
-                @Html.HiddenFor(model => model.Id)
-                <input type="submit" value="Add Comment" class="btn btn-primary" style="background-color: #DE1002; border-color: #ff4500;" />
-            }
-        </div>
-    }
+            </div>
 
-    @if (Model.MovieCommentsresource != null && Model.MovieCommentsresource.Count > 0)
-    {
-        <div class="comments-container" style="margin-top:20px">
-            <h2 style="color: #DE1002;">Reviews</h2>
-            <ul style="list-style-type: none; padding: 0;">
-                @foreach (var comment in Model.MovieCommentsresource)
-                {
-                    <li style="margin-bottom: 20px; border: 1px solid #DE1002; padding: 10px;">
-                        <div class="comment-info">
-                            <span class="comment-user" style="color: #ff4500;">@comment.User</span>
-                            <span class="comment-date" style="color: #999; margin-left: 10px;">@comment.PostDate.ToShortDateString()</span>
-                        </div>
-                        <div class="comment-content" style="margin-top: 10px;">
-                            @comment.Post
-                        </div>
-                    </li>
-                }
-            </ul>
         </div>
-    }
-    else if (Model.MovieCommentsresource.Count == 0)
-    {
-        <div class="comments-container" style="margin-top: 20px;">
-            <h2 style="color: #DE1002;">Reviews</h2>
-            <h6 style="font-size: 14px; color: #fff;">No Reviews</h6>
-        </div>
-    }
+    </div>
+
+
+
+
 
 
 </section>

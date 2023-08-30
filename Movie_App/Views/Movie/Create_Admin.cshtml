@@ -2,16 +2,18 @@
 
 @{
     ViewBag.Title = "Create_Admin";
-    Layout = "../Shared/_LayoutAdmin.cshtml";
+       Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 
 }
+
+
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <br />
-  
+
     <div class="container">
         <h4>Add a New Admin</h4>
         <form>
@@ -35,7 +37,7 @@
                 </div>
 
             </div>
-            
+
             <div class="row mb-3">
                 <div class="col-md-6">
                     <div class="form-floating mb-3 mb-md-0" style="display:flex">
@@ -50,12 +52,12 @@
 
             </div>
             <div class="">
-                <input type="submit" value="Add Admin" class="btn text-white"style="background-color:#DE1002" />
+                <input type="submit" value="Add Admin" class="btn text-white" style="background-color:#DE1002" />
             </div>
 
         </form>
     </div>
 
-    
+
 }
 

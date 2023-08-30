@@ -25,6 +25,7 @@ namespace Movie_App.Models
         public string Country { get; set; }
 
         public string ImagePath { get; set; }
+
         public string VideoPath { get; set; }
 
         public string Slug { get; set; }

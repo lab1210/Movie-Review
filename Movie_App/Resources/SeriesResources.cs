@@ -36,7 +36,6 @@ namespace Movie_App.Resources
 
         public HttpPostedFileBase Image { get; set; }
         public string VideoPath { get; set; }
-        public HttpPostedFileBase Video { get; set; }
 
 
         public virtual List<SeriesCommentresource> SeriesCommentresources { get; set; }

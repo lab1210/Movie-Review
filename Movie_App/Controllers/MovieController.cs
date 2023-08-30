@@ -32,6 +32,9 @@ namespace Movie_App.Controllers
         {
             var loggedInUserName = HttpContext.Session["LoggedInUserName"] as string;
             ViewBag.LoggedInUserName = loggedInUserName;
+            var userrole = HttpContext.Session["UserRole"] as string;
+            ViewBag.UserRole = userrole;
+
             var details = movieService.Getgenredetails();
             
             return View(details);
@@ -42,7 +45,6 @@ namespace Movie_App.Controllers
         public ActionResult AddMovie(MovieResources movie)
         {
             string filePath = "";
-            string VideoPath = "";
 
             if (ModelState.IsValid)
             {
@@ -55,22 +57,10 @@ namespace Movie_App.Controllers
                     filePath = "/MoviePics/" + filename;
                 }
 
-                if (movie.Video != null &&movie.Video.ContentLength>0)
-                {
-                    var allowedVideoTypes = new[] { "video/mp4", "video/webm" }; 
-                    if (!allowedVideoTypes.Contains(movie.Video.ContentType))
-                    {
-                        ModelState.AddModelError("file", "Only MP4 and WebM video types are allowed.");
-                    }
-                    var filename = Path.GetFileName(movie.Video.FileName);
-                    var path = Path.Combine(Server.MapPath("~/Trailers"), filename);
-                    movie.Video.SaveAs(path);
-                    VideoPath = "/Trailers/" + filename;
-                }
+              
 
             }
             movie.ImagePath = filePath;
-            movie.VideoPath = VideoPath;
 
             Random random = new Random();
             int code = random.Next(1000, 10000);
@@ -87,12 +77,18 @@ namespace Movie_App.Controllers
         }
         public ActionResult MovieList()
         {
+            var userrole = HttpContext.Session["UserRole"] as string;
+            ViewBag.UserRole = userrole;
+
             var loggedInUserName = HttpContext.Session["LoggedInUserName"] as string;
             ViewBag.LoggedInUserName = loggedInUserName;
             return View(movieService.GetAllMovies());
         }
         public ActionResult EditMovie(int id)
         {
+            var userrole = HttpContext.Session["UserRole"] as string;
+            ViewBag.UserRole = userrole;
+
             var loggedInUserName = HttpContext.Session["LoggedInUserName"] as string;
             ViewBag.LoggedInUserName = loggedInUserName;
             var movie = movieService.GetMovieById(id);
@@ -104,36 +100,22 @@ namespace Movie_App.Controllers
         public ActionResult EditMovie(MovieResources movie)
         {
             string filePath = "";
-            string VideoPath = "";
 
             if (ModelState.IsValid)
             {
                 if (movie.Image != null && movie.Image.ContentLength > 0)
                 {
-
-                    
-
                     var filename = Path.GetFileName(movie.Image.FileName);
                     var path = Path.Combine(Server.MapPath("~/MoviePics"), filename);
                     movie.Image.SaveAs(path);
                     filePath = "/MoviePics/" + filename;
                 }
-
-                if (movie.Video != null && movie.Video.ContentLength > 0)
+                else
                 {
-                    var allowedVideoTypes = new[] { "video/mp4", "video/webm" }; 
-                    if (!allowedVideoTypes.Contains(movie.Video.ContentType))
-                    {
-                        ModelState.AddModelError("file", "Only MP4 and WebM video types are allowed.");
-                    }
-
-                    var filename = Path.GetFileName(movie.Video.FileName);
-                    var path = Path.Combine(Server.MapPath("~/Trailers"), filename);
-                    movie.Video.SaveAs(path);
-                    VideoPath = "/Trailers/" + filename;
+                    filePath = movieService.GetMovieById(movie.Id).ImagePath;
                 }
+
                 movie.ImagePath = filePath;
-                movie.VideoPath = VideoPath;
 
 
                 movieService.UpdateMovie(movie);
@@ -151,6 +133,9 @@ namespace Movie_App.Controllers
         }
         public ActionResult AddSeries()
         {
+            var userrole = HttpContext.Session["UserRole"] as string;
+            ViewBag.UserRole = userrole;
+
             var loggedInUserName = HttpContext.Session["LoggedInUserName"] as string;
             ViewBag.LoggedInUserName = loggedInUserName;
             var details = seriesService.Getgenredetails();
@@ -163,7 +148,6 @@ namespace Movie_App.Controllers
         {
 
             string filePath = "";
-            string VideoPath = "";
 
             if (ModelState.IsValid)
             {
@@ -183,23 +167,9 @@ namespace Movie_App.Controllers
                     filePath = "/MoviePics/" + filename;
                 }
 
-                if (series.Video != null && series.Video.ContentLength > 0)
-                {
-                    var allowedVideoTypes = new[] { "video/mp4", "video/webm" };
-                    if (!allowedVideoTypes.Contains(series.Video.ContentType))
-                    {
-                        ModelState.AddModelError("file", "Only MP4 and WebM video types are allowed.");
-                    }
-
-                    var filename = Path.GetFileName(series.Video.FileName);
-                    var path = Path.Combine(Server.MapPath("~/Trailers"), filename);
-                    series.Video.SaveAs(path);
-                    VideoPath = "/Trailers/" + filename;
-                }
-
+               
             }
             series.ImagePath = filePath;
-            series.VideoPath = VideoPath;
 
             Random random = new Random();
             int code;
@@ -216,6 +186,9 @@ namespace Movie_App.Controllers
         }
         public ActionResult SeriesList()
         {
+            var userrole = HttpContext.Session["UserRole"] as string;
+            ViewBag.UserRole = userrole;
+
             var loggedInUserName = HttpContext.Session["LoggedInUserName"] as string;
             ViewBag.LoggedInUserName = loggedInUserName;
             return View(seriesService.GetAllSeries());
@@ -223,6 +196,9 @@ namespace Movie_App.Controllers
         }
         public ActionResult EditSeries(int id)
         {
+            var userrole = HttpContext.Session["UserRole"] as string;
+            ViewBag.UserRole = userrole;
+
             var loggedInUserName = HttpContext.Session["LoggedInUserName"] as string;
             ViewBag.LoggedInUserName = loggedInUserName;
             var movie = seriesService.GetSeriesById(id);
@@ -234,7 +210,6 @@ namespace Movie_App.Controllers
         public ActionResult EditSeries(SeriesResources movie)
         {
             string filePath = "";
-            string VideoPath = "";
 
 
             if (ModelState.IsValid)
@@ -254,21 +229,12 @@ namespace Movie_App.Controllers
                     movie.Image.SaveAs(path);
                     filePath = "/MoviePics/" + filename;
                 }
-                if (movie.Video != null && movie.Video.ContentLength > 0)
+                else
                 {
-                    var allowedVideoTypes = new[] { "video/mp4", "video/webm" };
-                    if (!allowedVideoTypes.Contains(movie.Video.ContentType))
-                    {
-                        ModelState.AddModelError("file", "Only MP4 and WebM video types are allowed.");
-                    }
-
-                    var filename = Path.GetFileName(movie.Video.FileName);
-                    var path = Path.Combine(Server.MapPath("~/Trailers"), filename);
-                    movie.Video.SaveAs(path);
-                    VideoPath = "/Trailers/" + filename;
+                    filePath = seriesService.GetSeriesById(movie.Id).ImagePath;
                 }
+
                 movie.ImagePath = filePath;
-                movie.VideoPath = VideoPath;
 
                 seriesService.UpdateSeries(movie);
                 return RedirectToAction("SeriesList");
@@ -285,12 +251,18 @@ namespace Movie_App.Controllers
         }
         public ActionResult GenreList()
         {
+            var userrole = HttpContext.Session["UserRole"] as string;
+            ViewBag.UserRole = userrole;
+
             var loggedInUserName = HttpContext.Session["LoggedInUserName"] as string;
             ViewBag.LoggedInUserName = loggedInUserName;
             return View(genreService.GetAll());
         }
         public ActionResult AddGenre()
         {
+            var userrole = HttpContext.Session["UserRole"] as string;
+            ViewBag.UserRole = userrole;
+
             var loggedInUserName = HttpContext.Session["LoggedInUserName"] as string;
             ViewBag.LoggedInUserName = loggedInUserName;
             return View();
@@ -318,6 +290,9 @@ namespace Movie_App.Controllers
         }
         public ActionResult Create_Admin()
         {
+            var userrole = HttpContext.Session["UserRole"] as string;
+            ViewBag.UserRole = userrole;
+
             var loggedInUserName = HttpContext.Session["LoggedInUserName"] as string;
             ViewBag.LoggedInUserName = loggedInUserName;
             return View();
@@ -337,6 +312,9 @@ namespace Movie_App.Controllers
         }
         public ActionResult Admin_List()
         {
+            var userrole = HttpContext.Session["UserRole"] as string;
+            ViewBag.UserRole = userrole;
+
             var loggedInUserName = HttpContext.Session["LoggedInUserName"] as string;
             ViewBag.LoggedInUserName = loggedInUserName;
             return View(registerService.AdminList());

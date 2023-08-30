@@ -14,6 +14,8 @@ namespace Movie_App.Models
         public DbSet<Genre> genres { get; set; }
         public DbSet<Movie> Movies { get; set; }
         public DbSet<MovieComment> MoviesComment { get; set; }
+        public DbSet<SeriesComment> SeriesComments { get; set; }
+
         public DbSet<PickedGenre> pickedGenres { get; set; }
         public DbSet<Series> series { get; set; }
         public DbSet<SeriesPickedGenre> seriespickedGenres { get; set; }

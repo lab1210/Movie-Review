@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "SeriesList";
-    Layout = "../Shared/_LayoutAdmin.cshtml";
+       Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 
 }
 
@@ -71,9 +71,8 @@
                                 <a href="javascript:void(0);"></a>
                             </td>
                             <td>
-                                <a>
-                                    <video src="@item.VideoPath" alt="trailer" controls style="max-width:100px;max-height:100px" />
-                                </a>
+                                <a href="@item.VideoPath">@item.VideoPath</a>
+
                             </td>
                             <td> @Html.DisplayFor(modelitem => item.Name)</td>
                             <td> @Html.DisplayFor(modelitem => item.Description)</td>
